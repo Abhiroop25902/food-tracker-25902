@@ -100,7 +100,7 @@ disabled={!file || uploading}
               <span>Analyzing...</span>
             </>
           ) : (
-            <span>Start Analysis</span>
+            <span>Upload & Analyze</span>
           )}
         </button>
       </div>

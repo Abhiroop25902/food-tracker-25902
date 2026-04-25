@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { Brain, Zap, Waves, Moon, Heart, Utensils } from 'lucide-react';
+import { Brain, Zap, Waves, Moon, Heart, Utensils, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
 import type { Meal,  UserProfile } from '../types';
 
@@ -131,8 +131,8 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {meals.map((meal) => (
-          <div key={meal.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col md:flex-row">
-            <div className="md:w-1/3 relative h-48 md:h-auto">
+          <div key={meal.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col md:flex-row min-h-[280px]">
+            <div className="md:w-1/3 relative h-64 md:h-auto">
               <img src={meal.imageUrl} alt="Meal" className="w-full h-full object-cover" />
               <div className="absolute top-3 left-3">
                 <span className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-bold border border-white/20">
@@ -141,54 +141,69 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="p-6 md:w-2/3 space-y-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-bold text-xl">{meal.analysis?.calories} <span className="text-sm font-normal text-gray-400">kcal</span></h3>
-                  <div className="flex space-x-2 mt-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-600 px-2 py-0.5 rounded">Pro: {meal.analysis?.protein}g</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-orange-50 text-orange-600 px-2 py-0.5 rounded">Carb: {meal.analysis?.carbs}g</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded">Fat: {meal.analysis?.fat}g</span>
+            <div className="p-6 md:w-2/3 flex flex-col justify-center">
+              {!meal.analysis ? (
+                <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center">
+                  <div className="relative">
+                    <Brain className="w-12 h-12 text-indigo-200 animate-pulse" />
+                    <Loader2 className="w-12 h-12 text-indigo-500 animate-spin absolute inset-0" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Analyzing Your Meal...</h3>
+                    <p className="text-sm text-gray-500">Gemini is identifying ingredients and mental health impacts. This usually takes 5-10 seconds.</p>
                   </div>
                 </div>
-                <div className={clsx(
-                  "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border",
-                  meal.analysis?.mentalHealth.sugarCrashRisk === 'high' ? "bg-red-50 text-red-600 border-red-100" : "bg-green-50 text-green-600 border-green-100"
-                )}>
-                  Crash Risk: {meal.analysis?.mentalHealth.sugarCrashRisk}
-                </div>
-              </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-bold text-xl">{meal.analysis.calories} <span className="text-sm font-normal text-gray-400">kcal</span></h3>
+                      <div className="flex space-x-2 mt-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-600 px-2 py-0.5 rounded">Pro: {meal.analysis.protein}g</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-orange-50 text-orange-600 px-2 py-0.5 rounded">Carb: {meal.analysis.carbs}g</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded">Fat: {meal.analysis.fat}g</span>
+                      </div>
+                    </div>
+                    <div className={clsx(
+                      "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter border",
+                      meal.analysis.mentalHealth.sugarCrashRisk === 'high' ? "bg-red-50 text-red-600 border-red-100" : "bg-green-50 text-green-600 border-green-100"
+                    )}>
+                      Crash Risk: {meal.analysis.mentalHealth.sugarCrashRisk}
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <div className="flex items-center space-x-2 text-indigo-600 mb-1">
-                    <Zap size={14} />
-                    <span className="text-[10px] font-bold uppercase">Focus</span>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                      <div className="flex items-center space-x-2 text-indigo-600 mb-1">
+                        <Zap size={14} />
+                        <span className="text-[10px] font-bold uppercase">Focus</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.focusImpact}</p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                      <div className="flex items-center space-x-2 text-rose-500 mb-1">
+                        <Heart size={14} />
+                        <span className="text-[10px] font-bold uppercase">Mood</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.moodImpact}</p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                      <div className="flex items-center space-x-2 text-emerald-500 mb-1">
+                        <Waves size={14} />
+                        <span className="text-[10px] font-bold uppercase">Gut</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.gutHealth}</p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                      <div className="flex items-center space-x-2 text-blue-500 mb-1">
+                        <Moon size={14} />
+                        <span className="text-[10px] font-bold uppercase">Sleep</span>
+                      </div>
+                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.sleepImpact}</p>
+                    </div>
                   </div>
-                  <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis?.mentalHealth.focusImpact}</p>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <div className="flex items-center space-x-2 text-rose-500 mb-1">
-                    <Heart size={14} />
-                    <span className="text-[10px] font-bold uppercase">Mood</span>
-                  </div>
-                  <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis?.mentalHealth.moodImpact}</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <div className="flex items-center space-x-2 text-emerald-500 mb-1">
-                    <Waves size={14} />
-                    <span className="text-[10px] font-bold uppercase">Gut</span>
-                  </div>
-                  <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis?.mentalHealth.gutHealth}</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <div className="flex items-center space-x-2 text-blue-500 mb-1">
-                    <Moon size={14} />
-                    <span className="text-[10px] font-bold uppercase">Sleep</span>
-                  </div>
-                  <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis?.mentalHealth.sleepImpact}</p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         ))}

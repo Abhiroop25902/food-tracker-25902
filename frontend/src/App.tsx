@@ -10,6 +10,8 @@ import Navbar from './components/Navbar';
 import Onboarding from './components/Onboarding';
 import Profile from './components/Profile';
 
+import { Loader2 } from 'lucide-react';
+
 interface ProtectedRouteProps {
   user: User | null;
   onboarded: boolean | null;
@@ -44,7 +46,7 @@ function App() {
           setOnboarded(false);
         }
       } else {
-        setOnboarded(null);
+        onboarded !== null && setOnboarded(null);
       }
       setLoading(false);
     }, (error) => {
@@ -56,7 +58,12 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mb-4" />
+        <p className="text-gray-500 font-medium">Preparing your kitchen...</p>
+      </div>
+    );
   }
 
   return (

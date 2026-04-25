@@ -6,7 +6,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
 ## Tech Stack
 - **Frontend**: React 19 (Vite, TS), Tailwind v4, Lucide React, Firebase SDK.
 - **Backend**: Node.js Express (TS), Firebase Admin SDK, GCP Pub/Sub SDK, Axios.
-- **AI**: Gemini 3 Flash (via Vertex AI SDK).
+- **AI**: Gemini 2.5 Flash (via Vertex AI SDK).
 - **GCP Resources**: Cloud Pub/Sub (Topic: `meal-analysis`, Subscription: `meal-analysis-sub`), Vertex AI.
 - **Firebase**: Auth (Google), Firestore (Collection: `meals`), Storage (Bucket: `food-pics`).
 
@@ -45,15 +45,19 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Integrated **Daily Calorie Summary** on the Dashboard comparing intake vs. BMR.
     - [x] Updated Firestore rules to secure user profile data.
 - [x] **UX & Polish**:
-    - [x] Added **Meal Description Context** (optional) to the Upload screen, allowing users to provide additional details (e.g., quantities, hidden ingredients) for more accurate AI analysis.
+    - [x] Added **Meal Description Context** (optional) to the Upload screen.
     - [x] Fixed frontend CI/CD failures by removing unused imports in `Navbar.tsx`.
-    - [x] Standardized application to **Light Mode** to prevent dark-mode browser conflicts.
-    - [x] Hidden browser-default number input arrows for a cleaner look.
-    - [x] Improved dropdown UI with custom SVG arrows and balanced padding.
-    - [x] Migrated all forms to **React 19 Action Patterns** (`action` + `FormData`).
-    - [x] Configured **COOP Headers** (`same-origin-allow-popups`) in Vite and Firebase to fix Google Login popup issues.
+    - [x] Standardized application to **Light Mode**.
+    - [x] Hidden browser-default number input arrows.
+    - [x] Improved dropdown UI with custom SVG arrows.
+    - [x] Migrated all forms to **React 19 Action Patterns**.
+    - [x] Configured **COOP Headers** for Google Login.
     - [x] Resolved logout race conditions by improving Firestore listener cleanup.
-- [x] **CI/CD & GitHub**:
+    - [x] **New**: Replaced "Start Analysis" with "Upload & Analyze" for clarity.
+    - [x] **New**: Added a professional loader/spinner during authentication.
+    - [x] **New**: Stabilized Dashboard layout with fixed image aspect ratios and "Analyzing..." states.
+- [x] **AI Upgrade**: Migrated to `gemini-2.5-flash` for long-term stability and performance.
+
     - [x] Set up GitHub Actions for automated deployment:
         - `deploy-backend.yml`: Deploys Backend API to Cloud Run on changes to `backend/**`.
         - `deploy-worker.yml`: Deploys Worker to Cloud Run on changes to `worker/**`.
@@ -67,7 +71,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Verified service account scopes for Cloud Run deployments.
 
 - [x] **Branding**: Renamed application to "Mindful Bites" across all platforms.
-- [x] **AI Upgrade**: Migrated to `gemini-3-flash-preview` for better speed and cost efficiency.
+- [x] **AI Upgrade**: Migrated to `gemini-2.5-flash` for long-term stability and performance.
 - [x] **Documentation**: Updated README with "Mindful Bites" branding and long-term mental health benefits.
 - [x] **Infrastructure**: 
     - [x] Frontend link added: `https://food-tracker-25902.web.app`.
