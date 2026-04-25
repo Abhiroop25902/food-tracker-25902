@@ -39,11 +39,13 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Updated `.gitignore` to protect sensitive `.json` and `.env` files.
     - [x] Set up Cloud Run and Artifact Registry in `us-central1`.
 - [x] **User Management**:
-    - [x] Implemented **Onboarding Screen** for new users to collect weight, height, age, and gender.
-    - [x] Added **BMR Calculation** (Mifflin-St Jeor Equation) to estimate resting calorie usage.
-    - [x] Created a **Profile Page** for users to view and update their personal metrics.
-    - [x] Integrated **Daily Calorie Summary** on the Dashboard comparing intake vs. BMR.
+    - [x] Implemented **Onboarding Screen** for new users to collect weight, height, age, gender, and **Daily Calorie Goal**.
+    - [x] Added **BMR Calculation** (Mifflin-St Jeor Equation) and goal-based target calculation (+/- 500 kcal).
+    - [x] Created a **Profile Page** for users to view and update their personal metrics and calorie targets.
+    - [x] Integrated **Daily Calorie Summary** on the Dashboard comparing intake vs. the personalized **Daily Target**.
     - [x] Updated Firestore rules to secure user profile data.
+- [x] **AI Worker**:
+    - [x] Updated Gemini prompt to incorporate the user's **Daily Calorie Target** for more personalized nutritional advice (e.g., tailored for bulking vs. weight loss).
 - [x] **UX & Polish**:
     - [x] Added **Meal Description Context** (optional) to the Upload screen.
     - [x] Fixed frontend CI/CD failures by removing unused imports in `Navbar.tsx`.

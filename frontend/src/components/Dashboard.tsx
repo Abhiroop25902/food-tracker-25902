@@ -80,6 +80,8 @@ const Dashboard = () => {
     })
     .reduce((sum, meal) => sum + (meal.analysis?.calories || 0), 0);
 
+  const isLatestMealToday = meals[0] && new Date(meals[0].timestamp).toDateString() === new Date().toDateString();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -106,16 +108,16 @@ const Dashboard = () => {
               <div className="flex items-baseline space-x-1">
                 <span className="text-xl font-bold">{caloriesToday}</span>
                 <span className="text-gray-300">/</span>
-                <span className="text-sm text-gray-500">{Math.round(profile.bmr)} <span className="text-[10px]">BMR</span></span>
+                <span className="text-sm text-gray-500">{Math.round(profile.dailyCalorieTarget || profile.bmr)} <span className="text-[10px]">Target</span></span>
               </div>
             </div>
             <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className={clsx(
                   "h-full rounded-full transition-all duration-1000",
-                  caloriesToday > profile.bmr ? "bg-red-500" : "bg-orange-500"
+                  caloriesToday > (profile.dailyCalorieTarget || profile.bmr) ? "bg-red-500" : "bg-orange-500"
                 )}
-                style={{ width: `${Math.min((caloriesToday / profile.bmr) * 100, 100)}%` }}
+                style={{ width: `${Math.min((caloriesToday / (profile.dailyCalorieTarget || profile.bmr)) * 100, 100)}%` }}
               />
             </div>
           </div>
@@ -130,7 +132,9 @@ const Dashboard = () => {
         <div>
           <h2 className="text-xl font-bold mb-1">Latest Insight</h2>
           <p className="opacity-90 leading-relaxed">
-            {meals[0]?.analysis?.mentalHealth.advice || "Start by logging your first meal to see how it impacts your mental focus!"}
+            {isLatestMealToday && meals[0]?.analysis
+              ? meals[0].analysis.mentalHealth.advice
+              : "Welcome back! Start by logging your first meal of the day to see how it impacts your mental focus."}
           </p>
         </div>
       </section>

@@ -28,13 +28,51 @@ const model = vertexAI.getGenerativeModel({
 const app = express();
 app.use(express.json());
 
-const analyzeMeal = async (mealId: string, imageUrl: string, timestamp: string, description?: string) => {
+const analyzeMeal = async (mealId: string, imageUrl: string, userId: string, timestamp: string, description?: string) => {
   const timeContext = timestamp ? new Date(timestamp).toLocaleTimeString() : 'Unknown';
   const descriptionContext = description ? `\nUser provided description: "${description}"` : '';
   
+  // Fetch user profile for personalized advice
+  let userContext = '';
+  try {
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      if (userData?.dailyCalorieTarget) {
+        userContext = `\nUser's daily calorie target: ${Math.round(userData.dailyCalorieTarget)} kcal.`;
+      }
+    }
+
+    // Fetch other meals from today for cumulative context
+    const startOfDay = new Date(timestamp);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(timestamp);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const todayMeals = await db.collection('meals')
+      .where('userId', '==', userId)
+      .where('timestamp', '>=', admin.firestore.Timestamp.fromDate(startOfDay))
+      .where('timestamp', '<=', admin.firestore.Timestamp.fromDate(endOfDay))
+      .get();
+
+    const otherMeals = todayMeals.docs
+      .filter(doc => doc.id !== mealId)
+      .map(doc => {
+        const data = doc.data();
+        return `${data.analysis?.calories || 'Unknown'} kcal meal at ${data.timestamp.toDate().toLocaleTimeString()}`;
+      });
+
+    if (otherMeals.length > 0) {
+      userContext += `\nMeals already logged today:\n- ${otherMeals.join('\n- ')}`;
+      userContext += `\nProvide advice that considers the cumulative impact of these meals.`;
+    }
+  } catch (error) {
+    console.warn(`Could not fetch context for userId ${userId}:`, error);
+  }
+
   const prompt = `
     Analyze this food image and provide nutritional and mental health insights.
-    The meal was eaten at approximately: ${timeContext}.${descriptionContext}
+    The meal was eaten at approximately: ${timeContext}.${descriptionContext}${userContext}
     
     Provide the response in the following strict JSON format:
     {
@@ -49,7 +87,7 @@ const analyzeMeal = async (mealId: string, imageUrl: string, timestamp: string, 
         "sleepImpact": "string describing impact on sleep quality/timing",
         "gutHealth": "string describing fiber/microbiome impact",
         "moodImpact": "string describing short-term mood effect",
-        "advice": "one sentence advice connecting this specific food to mental well-being"
+        "advice": "one sentence advice connecting this specific food to the user's nutritional goal, their daily progress so far, and mental well-being"
       }
     }
     
@@ -133,7 +171,7 @@ app.post('/', async (req, res) => {
       return res.status(204).send();
     }
     
-    await analyzeMeal(mealId, imageUrl, timestamp, description);
+    await analyzeMeal(mealId, imageUrl, userId, timestamp, description);
     
     res.status(204).send();
   } catch (err) {
