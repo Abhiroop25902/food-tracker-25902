@@ -46,7 +46,7 @@ function App() {
           setOnboarded(false);
         }
       } else {
-        onboarded !== null && setOnboarded(null);
+        if (onboarded !== null) setOnboarded(null);
       }
       setLoading(false);
     }, (error) => {

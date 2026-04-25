@@ -1,7 +1,7 @@
 import { ChatVertexAI } from '@langchain/google-vertexai';
 import { StateGraph, Annotation, START, END } from '@langchain/langgraph';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { AgentState } from '../types';
+import { AgentState } from '../types/state';
 
 const model = new ChatVertexAI({
   model: 'gemini-2.5-flash',
@@ -107,7 +107,7 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
       "protein": number,
       "carbs": number,
       "fat": number,
-      "reasoning": "Brief explanation (2 sentences) of how you synthesized the different perspectives to reach this number.",
+      "reasoning": "Objective technical synthesis of arguments (max 2 sentences). Avoid first-person language ('I', 'my'). Focus on visual evidence and portion estimation logic.",
       "mentalHealth": {
         "sugarCrashRisk": "low" | "medium" | "high",
         "focusImpact": "string",

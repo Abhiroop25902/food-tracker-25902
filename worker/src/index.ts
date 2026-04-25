@@ -25,32 +25,8 @@ const analyzeMeal = async (mealId: string, imageUrl: string, userId: string, tim
     if (userDoc.exists) {
       const userData = userDoc.data();
       if (userData?.dailyCalorieTarget) {
-        userContext = `
-User's daily calorie target: ${Math.round(userData.dailyCalorieTarget)} kcal.`;
+        userContext = `User's daily calorie target: ${Math.round(userData.dailyCalorieTarget)} kcal.`;
       }
-    }
-    
-    const startOfDay = new Date(timestamp);
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date(timestamp);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    const todayMeals = await db.collection('meals')
-      .where('userId', '==', userId)
-      .where('timestamp', '>=', admin.firestore.Timestamp.fromDate(startOfDay))
-      .where('timestamp', '<=', admin.firestore.Timestamp.fromDate(endOfDay))
-      .get();
-
-    const otherMeals = todayMeals.docs
-      .filter(doc => doc.id !== mealId)
-      .map(doc => {
-        const data = doc.data();
-        return `${data.analysis?.calories || 'Unknown'} kcal meal at ${data.timestamp.toDate().toLocaleTimeString()}`;
-      });
-
-    if (otherMeals.length > 0) {
-      userContext += `
-Meals logged today: ${otherMeals.join(', ')}`;
     }
   } catch (error) {
     console.warn(`Could not fetch context for userId ${userId}:`, error);
@@ -81,7 +57,7 @@ Meals logged today: ${otherMeals.join(', ')}`;
 
     // 3. Generate and Update Global Insight
     try {
-      const globalInsight = await generateDailyInsight(result.finalAnalysis, userContext);
+      const globalInsight = await generateDailyInsight(mealId, userId, db);
       await db.collection('meals').doc(mealId).update({
         "analysis.mentalHealth.advice": globalInsight
       });
