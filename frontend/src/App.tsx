@@ -60,8 +60,7 @@ function App() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mb-4" />
-        <p className="text-gray-500 font-medium">Preparing your kitchen...</p>
+        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
       </div>
     );
   }

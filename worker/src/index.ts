@@ -120,6 +120,19 @@ app.post('/', async (req, res) => {
     const { mealId, imageUrl, timestamp, description } = JSON.parse(data);
     console.log(`Processing meal analysis for mealId: ${mealId}`);
     
+    // Check for existence and idempotency
+    const mealDoc = await db.collection('meals').doc(mealId).get();
+    if (!mealDoc.exists) {
+      console.log(`Meal ${mealId} not found in Firestore. It might have been deleted. Skipping.`);
+      return res.status(204).send();
+    }
+
+    const mealData = mealDoc.data();
+    if (mealData?.status === 'completed' || mealData?.analysis) {
+      console.log(`Meal ${mealId} already processed, skipping.`);
+      return res.status(204).send();
+    }
+    
     await analyzeMeal(mealId, imageUrl, timestamp, description);
     
     res.status(204).send();

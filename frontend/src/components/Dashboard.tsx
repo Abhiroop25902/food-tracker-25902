@@ -80,7 +80,13 @@ const Dashboard = () => {
     })
     .reduce((sum, meal) => sum + (meal.analysis?.calories || 0), 0);
 
-  if (loading) return <div className="flex items-center justify-center py-20">Loading your history...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 pb-12">
@@ -131,8 +137,8 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {meals.map((meal) => (
-          <div key={meal.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col md:flex-row min-h-[280px]">
-            <div className="md:w-1/3 relative h-64 md:h-auto">
+          <div key={meal.id} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col md:flex-row h-auto md:h-72">
+            <div className="md:w-1/3 relative h-64 md:h-full">
               <img src={meal.imageUrl} alt="Meal" className="w-full h-full object-cover" />
               <div className="absolute top-3 left-3">
                 <span className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-bold border border-white/20">
@@ -141,15 +147,14 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="p-6 md:w-2/3 flex flex-col justify-center">
+            <div className="p-6 md:w-2/3 flex flex-col justify-center overflow-y-auto">
               {!meal.analysis ? (
-                <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center">
+                <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center h-full">
                   <div className="relative">
-                    <Brain className="w-12 h-12 text-indigo-200 animate-pulse" />
-                    <Loader2 className="w-12 h-12 text-indigo-500 animate-spin absolute inset-0" />
+                    <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Analyzing Your Meal...</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">Analyzing Your Meal...</h3>
                     <p className="text-sm text-gray-500">Gemini is identifying ingredients and mental health impacts. This usually takes 5-10 seconds.</p>
                   </div>
                 </div>

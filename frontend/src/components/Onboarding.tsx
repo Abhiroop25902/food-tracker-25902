@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import type { UserProfile } from '../types';
+import { Loader2 } from 'lucide-react';
 
 interface OnboardingProps {
   onComplete: () => void;
@@ -122,9 +123,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition shadow-md disabled:opacity-50"
+          className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 transition shadow-md disabled:opacity-50 flex items-center justify-center space-x-2"
         >
-          {loading ? 'Saving...' : 'Complete Setup'}
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin" />
+              <span>Saving...</span>
+            </>
+          ) : 'Complete Setup'}
         </button>
       </form>
     </div>

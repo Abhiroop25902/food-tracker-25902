@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import type { UserProfile } from '../types';
-import { User, Scale, Ruler, Calendar, Activity, LogOut } from 'lucide-react';
+import { User, Scale, Ruler, Calendar, Activity, LogOut, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Profile: React.FC = () => {
@@ -87,7 +87,13 @@ const Profile: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="flex justify-center p-8">Loading profile...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center p-20">
+        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -214,9 +220,14 @@ const Profile: React.FC = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-50 flex items-center space-x-2"
                 >
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>Saving...</span>
+                    </>
+                  ) : 'Save Changes'}
                 </button>
                 <button
                   type="button"

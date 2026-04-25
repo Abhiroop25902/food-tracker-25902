@@ -97,7 +97,7 @@ disabled={!file || uploading}
           {uploading ? (
             <>
               <Loader2 className="animate-spin" />
-              <span>Analyzing...</span>
+              <span>Uploading...</span>
             </>
           ) : (
             <span>Upload & Analyze</span>
