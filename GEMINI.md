@@ -63,6 +63,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Refined upload feedback to show "Uploading..." during the network phase.
     - [x] **New**: Simplified meal analysis UI by removing the brain icon for a cleaner spinner look.
     - [x] **New**: Added click-to-expand functionality for mental health insights (Focus, Mood, Gut, Sleep) to prevent text truncation.
+    - [x] **New**: Centered the Login page portlet vertically and horizontally using flexbox.
 - [x] **New**: Implemented meal deletion from Dashboard with synchronized GCS image removal.
 - [x] **Reliability & Idempotency**:
     - [x] Implemented idempotency in Worker to prevent re-processing already analyzed meals.

@@ -67,9 +67,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 text-gray-900">
+      <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
         {user && onboarded === true && <Navbar user={user} />}
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-8 flex-grow flex flex-col">
           <Routes>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
             <Route path="/onboarding" element={user && onboarded === false ? <Onboarding onComplete={() => setOnboarded(true)} /> : <Navigate to="/" />} />
