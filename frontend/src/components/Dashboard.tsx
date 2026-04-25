@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { Brain, Zap, Waves, Moon, Heart, Clock, CheckCircle2 } from 'lucide-react';
+import { Brain, Zap, Waves, Moon, Heart } from 'lucide-react';
 import clsx from 'clsx';
 import { type Meal } from '../types';
 
