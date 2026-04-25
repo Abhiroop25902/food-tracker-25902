@@ -92,13 +92,17 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Replaced single-prompt analysis with a **LangGraph-based dialectical system**.
     - [x] Implemented **Overestimator** and **Underestimator** agents to bracket macro accuracy.
     - [x] Implemented **Overseer Agent** to synthesize technical arguments and provide a final "AI Reasoning" field.
+    - [x] **New**: Refined Overseer prompt to ensure objective (third-person) and concise reasoning (max 2 sentences).
     - [x] Implemented **Insight Agent (Health Coach)** to generate holistic daily advice based on cumulative meal history.
+    - [x] **New**: Decoupled Health Coach data flow to pull fresh data directly from Firestore post-analysis.
 - [x] **Modular Architecture**: 
     - [x] Refactored worker into `src/graph`, `src/services`, and `src/types`.
+    - [x] **New**: Further modularized `src/types` into `meal.ts` and `state.ts`.
     - [x] Added `reasoning` field to Firestore and Frontend UI for transparency.
 - [x] **Bug Fixes**: 
     - [x] Fixed `userId` reference error in Worker that caused Cloud Run deployment failures.
     - [x] Resolved Frontend build errors by cleaning up `dummyData.ts` and updating types.
+    - [x] **New**: Fixed React/Lint errors in `App.tsx` regarding unused expressions and missing dependencies.
 - [x] **Documentation**: Updated README with "Mindful Bites" branding and long-term mental health benefits.
 - [x] **Infrastructure**: 
     - [x] Frontend link added: `https://food-tracker-25902.web.app`.
