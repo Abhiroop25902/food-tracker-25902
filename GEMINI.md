@@ -41,12 +41,21 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Fixed Vertex AI SDK typo (`inline_data` -> `inlineData`).
     - [x] Added `.dockerignore` and fixed Dockerfile build issues.
     - [x] Updated frontend `BACKEND_URL` to point to production.
+    - [x] Fixed TypeScript linting errors in `Dashboard.tsx` (unused icon imports).
+- [x] **CI/CD & GitHub**:
+    - [x] Set up GitHub Actions for automated deployment:
+        - `deploy-backend.yml`: Deploys Backend API to Cloud Run on changes to `backend/**`.
+        - `deploy-worker.yml`: Deploys Worker to Cloud Run on changes to `worker/**`.
+        - `firebase-hosting-merge.yml`: Deploys Frontend to Firebase Hosting on changes to `frontend/**`.
+    - [x] Configured all workflows to use Node.js 24 runners (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`).
+    - [x] Pushed codebase to GitHub repository: `https://github.com/Abhiroop25902/food-tracker-25902.git`.
+- [x] **Security**:
+    - [x] Patched Dependabot alerts by updating `uuid` to `>=14.0.0` and `@tootallnate/once` to `>=3.0.1`.
 
 ## Next Steps
 1. **Apply CORS**: Run `gsutil cors set cors.json gs://food-tracker-25902.firebasestorage.app`.
 2. **Deploy Rules**: Run `firebase deploy --only firestore,storage`.
-3. **Frontend Deployment**: Deploy frontend to Firebase Hosting.
-4. **Real Image Testing**: Test the full upload-to-insight loop with the cloud infrastructure.
+3. **Real Image Testing**: Test the full upload-to-insight loop with the cloud infrastructure.
 
 ## Key Files
 - `firestore.rules` & `storage.rules`: Security configuration.
