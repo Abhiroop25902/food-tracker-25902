@@ -62,6 +62,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Replaced all "Loading..." text with centered circular loaders across App, Dashboard, and Profile.
     - [x] **New**: Refined upload feedback to show "Uploading..." during the network phase.
     - [x] **New**: Simplified meal analysis UI by removing the brain icon for a cleaner spinner look.
+    - [x] **New**: Added click-to-expand functionality for mental health insights (Focus, Mood, Gut, Sleep) to prevent text truncation.
 - [x] **Reliability & Idempotency**:
     - [x] Implemented idempotency in Worker to prevent re-processing already analyzed meals.
     - [x] Added safety checks for deleted Firestore documents to prevent infinite Pub/Sub retry loops.

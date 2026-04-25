@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { Brain, Zap, Waves, Moon, Heart, Utensils, Loader2 } from 'lucide-react';
+import { Brain, Zap, Waves, Moon, Heart, Utensils, Loader2, ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
 import type { Meal,  UserProfile } from '../types';
 
@@ -9,6 +9,15 @@ const Dashboard = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [expandedInsights, setExpandedInsights] = useState<Record<string, boolean>>({});
+
+  const toggleInsight = (mealId: string, insightType: string) => {
+    const key = `${mealId}-${insightType}`;
+    setExpandedInsights(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
 
   useEffect(() => {
     let unsubscribeSnapshot: (() => void) | null = null;
@@ -151,7 +160,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="p-6 md:w-2/3 flex flex-col justify-center overflow-y-auto">
+            <div className="p-6 md:w-2/3 flex flex-col overflow-y-auto">
               {!meal.analysis ? (
                 <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center h-full">
                   <div className="relative">
@@ -163,7 +172,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4 my-auto">
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-bold text-xl">{meal.analysis.calories} <span className="text-sm font-normal text-gray-400">kcal</span></h3>
@@ -182,34 +191,73 @@ const Dashboard = () => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                      <div className="flex items-center space-x-2 text-indigo-600 mb-1">
-                        <Zap size={14} />
-                        <span className="text-[10px] font-bold uppercase">Focus</span>
+                    <button 
+                      onClick={() => toggleInsight(meal.id, 'focus')}
+                      className="bg-gray-50 p-3 rounded-xl border border-gray-100 text-left transition-all hover:bg-gray-100 active:scale-[0.98] group"
+                    >
+                      <div className="flex items-center justify-between text-indigo-600 mb-1">
+                        <div className="flex items-center space-x-2">
+                          <Zap size={14} />
+                          <span className="text-[10px] font-bold uppercase">Focus</span>
+                        </div>
+                        <ChevronDown size={12} className={clsx("transition-transform duration-300 opacity-50 group-hover:opacity-100", expandedInsights[`${meal.id}-focus`] && "rotate-180")} />
                       </div>
-                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.focusImpact}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                      <div className="flex items-center space-x-2 text-rose-500 mb-1">
-                        <Heart size={14} />
-                        <span className="text-[10px] font-bold uppercase">Mood</span>
+                      <p className={clsx(
+                        "text-[11px] text-gray-600 leading-tight",
+                        !expandedInsights[`${meal.id}-focus`] && "line-clamp-2"
+                      )}>{meal.analysis.mentalHealth.focusImpact}</p>
+                    </button>
+
+                    <button 
+                      onClick={() => toggleInsight(meal.id, 'mood')}
+                      className="bg-gray-50 p-3 rounded-xl border border-gray-100 text-left transition-all hover:bg-gray-100 active:scale-[0.98] group"
+                    >
+                      <div className="flex items-center justify-between text-rose-500 mb-1">
+                        <div className="flex items-center space-x-2">
+                          <Heart size={14} />
+                          <span className="text-[10px] font-bold uppercase">Mood</span>
+                        </div>
+                        <ChevronDown size={12} className={clsx("transition-transform duration-300 opacity-50 group-hover:opacity-100", expandedInsights[`${meal.id}-mood`] && "rotate-180")} />
                       </div>
-                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.moodImpact}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                      <div className="flex items-center space-x-2 text-emerald-500 mb-1">
-                        <Waves size={14} />
-                        <span className="text-[10px] font-bold uppercase">Gut</span>
+                      <p className={clsx(
+                        "text-[11px] text-gray-600 leading-tight",
+                        !expandedInsights[`${meal.id}-mood`] && "line-clamp-2"
+                      )}>{meal.analysis.mentalHealth.moodImpact}</p>
+                    </button>
+
+                    <button 
+                      onClick={() => toggleInsight(meal.id, 'gut')}
+                      className="bg-gray-50 p-3 rounded-xl border border-gray-100 text-left transition-all hover:bg-gray-100 active:scale-[0.98] group"
+                    >
+                      <div className="flex items-center justify-between text-emerald-500 mb-1">
+                        <div className="flex items-center space-x-2">
+                          <Waves size={14} />
+                          <span className="text-[10px] font-bold uppercase">Gut</span>
+                        </div>
+                        <ChevronDown size={12} className={clsx("transition-transform duration-300 opacity-50 group-hover:opacity-100", expandedInsights[`${meal.id}-gut`] && "rotate-180")} />
                       </div>
-                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.gutHealth}</p>
-                    </div>
-                    <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                      <div className="flex items-center space-x-2 text-blue-500 mb-1">
-                        <Moon size={14} />
-                        <span className="text-[10px] font-bold uppercase">Sleep</span>
+                      <p className={clsx(
+                        "text-[11px] text-gray-600 leading-tight",
+                        !expandedInsights[`${meal.id}-gut`] && "line-clamp-2"
+                      )}>{meal.analysis.mentalHealth.gutHealth}</p>
+                    </button>
+
+                    <button 
+                      onClick={() => toggleInsight(meal.id, 'sleep')}
+                      className="bg-gray-50 p-3 rounded-xl border border-gray-100 text-left transition-all hover:bg-gray-100 active:scale-[0.98] group"
+                    >
+                      <div className="flex items-center justify-between text-blue-500 mb-1">
+                        <div className="flex items-center space-x-2">
+                          <Moon size={14} />
+                          <span className="text-[10px] font-bold uppercase">Sleep</span>
+                        </div>
+                        <ChevronDown size={12} className={clsx("transition-transform duration-300 opacity-50 group-hover:opacity-100", expandedInsights[`${meal.id}-sleep`] && "rotate-180")} />
                       </div>
-                      <p className="text-[11px] text-gray-600 leading-tight line-clamp-2">{meal.analysis.mentalHealth.sleepImpact}</p>
-                    </div>
+                      <p className={clsx(
+                        "text-[11px] text-gray-600 leading-tight",
+                        !expandedInsights[`${meal.id}-sleep`] && "line-clamp-2"
+                      )}>{meal.analysis.mentalHealth.sleepImpact}</p>
+                    </button>
                   </div>
                 </div>
               )}
