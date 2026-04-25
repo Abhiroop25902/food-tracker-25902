@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.12.0",
+    "@langchain/core": "^1.1.41",
+    "@langchain/google-vertexai": "^2.1.28",
+    "@langchain/langgraph": "^1.2.9",
+    "@tootallnate/once": ">=3.0.1",
     "axios": "^1.15.2",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "firebase-admin": "^13.8.0",
-    "uuid": ">=14.0.0",
-    "@tootallnate/once": ">=3.0.1"
+    "uuid": ">=14.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

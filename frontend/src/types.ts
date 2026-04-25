@@ -8,6 +8,7 @@ export type Meal = {
     protein: number;
     carbs: number;
     fat: number;
+    reasoning: string;
     mentalHealth: {
       sugarCrashRisk: 'low' | 'medium' | 'high';
       focusImpact: string;

@@ -216,6 +216,18 @@ const Dashboard = () => {
                     </div>
                   </div>
 
+                  {meal.analysis.reasoning && (
+                    <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100/50">
+                      <div className="flex items-center space-x-2 text-indigo-600 mb-1">
+                        <Brain size={14} />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">AI Reasoning</span>
+                      </div>
+                      <p className="text-[11px] text-gray-700 leading-relaxed italic">
+                        "{meal.analysis.reasoning}"
+                      </p>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-2 gap-3">
                     <button 
                       onClick={() => toggleInsight(meal.id, 'focus')}
