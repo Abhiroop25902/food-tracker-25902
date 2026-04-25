@@ -87,8 +87,33 @@ app.post('/', async (req, res) => {
 
   try {
     const { mealId, imageUrl, userId, timestamp, description } = JSON.parse(data);
-    const mealDoc = await db.collection('meals').doc(mealId).get();
-    if (!mealDoc.exists || mealDoc.data()?.status === 'completed') return res.status(204).send();
+    
+    // Use a transaction to "claim" the meal and prevent race conditions
+    const result = await db.runTransaction(async (transaction) => {
+      const mealRef = db.collection('meals').doc(mealId);
+      const mealDoc = await transaction.get(mealRef);
+
+      if (!mealDoc.exists) {
+        return { action: 'skip', reason: 'not_found' };
+      }
+
+      const status = mealDoc.data()?.status;
+      
+      // Only proceed if the status is exactly 'processing' (the initial state)
+      // If it's already 'analyzing' or 'completed', another worker has it or finished it.
+      if (status !== 'processing') {
+        return { action: 'skip', reason: status };
+      }
+
+      // Claim it by moving it to 'analyzing'
+      transaction.update(mealRef, { status: 'analyzing', claimedAt: admin.firestore.FieldValue.serverTimestamp() });
+      return { action: 'proceed' };
+    });
+
+    if (result.action === 'skip') {
+      console.log(`Skipping meal ${mealId} (Reason: ${result.reason})`);
+      return res.status(204).send();
+    }
     
     await analyzeMeal(mealId, imageUrl, userId, timestamp, description);
     res.status(204).send();

@@ -70,6 +70,8 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Standardized header font sizes (3xl) across major views (Dashboard & Upload).
 - [x] **New**: Implemented meal deletion from Dashboard with synchronized GCS image removal.
 - [x] **Reliability & Idempotency**:
+    - [x] Implemented atomic "claiming" logic in Worker using Firestore transactions to prevent race conditions where multiple instances process the same meal.
+    - [x] Added `analyzing` status state to track in-progress processing.
     - [x] Implemented idempotency in Worker to prevent re-processing already analyzed meals.
     - [x] Added safety checks for deleted Firestore documents to prevent infinite Pub/Sub retry loops.
 - [x] **AI Upgrade**: Migrated to `gemini-2.5-flash` for long-term stability and performance.
