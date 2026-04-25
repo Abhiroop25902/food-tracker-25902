@@ -117,7 +117,7 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto w-full space-y-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="bg-indigo-600 h-32 relative">
           <div className="absolute -bottom-12 left-8">

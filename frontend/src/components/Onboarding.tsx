@@ -73,7 +73,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+    <div className="max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
       <h2 className="text-2xl font-bold mb-2">Welcome to Mindful Bites!</h2>
       <p className="text-gray-500 mb-6">Let's get to know you better to personalize your nutrition insights.</p>
 

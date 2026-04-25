@@ -47,8 +47,8 @@ const Upload = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Analyze Your Meal</h2>
+    <div className="max-w-4xl mx-auto w-full min-w-[320px] md:min-w-[500px]">
+      <h1 className="text-3xl font-bold mb-6 text-center md:text-left">Analyze Your Meal</h1>
       
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
         {!preview ? (

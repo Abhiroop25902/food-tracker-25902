@@ -64,6 +64,10 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Simplified meal analysis UI by removing the brain icon for a cleaner spinner look.
     - [x] **New**: Added click-to-expand functionality for mental health insights (Focus, Mood, Gut, Sleep) to prevent text truncation.
     - [x] **New**: Centered the Login page portlet vertically and horizontally using flexbox.
+    - [x] **New**: Standardized application width to `max-w-4xl` across Dashboard, Upload, and Profile for a consistent look.
+    - [x] **New**: Refactored meal items into a standalone `MealCard` component with optimized vertical spacing and localized state.
+    - [x] **New**: Implemented expandable "AI Reasoning" section in `MealCard` that hides text by default to reduce visual clutter.
+    - [x] **New**: Standardized header font sizes (3xl) across major views (Dashboard & Upload).
 - [x] **New**: Implemented meal deletion from Dashboard with synchronized GCS image removal.
 - [x] **Reliability & Idempotency**:
     - [x] Implemented idempotency in Worker to prevent re-processing already analyzed meals.
