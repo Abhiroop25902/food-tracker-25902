@@ -14,11 +14,12 @@ An app for a Google Hackathon where users photograph food to track both macros a
 - **Project ID**: `food-tracker-25902`
 - **Frontend Port**: 5173
 - **Backend Port**: 8080 (Cloud Run compatible)
-- **Local Dev**: Backend includes a local Pub/Sub subscriber in `src/index.ts` to process tasks immediately.
+- **Local Dev**: Backend publishes to Pub/Sub; Cloud Worker handles consumption.
 - **Service Account**: Local backend uses `backend/service-account.json` (ignored by git).
 - **Storage Bucket**: `food-tracker-25902.firebasestorage.app`
 
 ## Current Progress
+- [x] **Architecture**: Removed redundant local worker logic from backend; enforced strict Pub/Sub flow (API -> Pub/Sub -> Worker).
 - [x] **Frontend UI**: Dashboard with real-time Firestore listeners, Upload component with Firebase Storage integration.
 - [x] **Backend API**: `POST /api/meals` saves metadata to Firestore and triggers Pub/Sub.
 - [x] **AI Worker**: Gemini 1.5 Flash prompt designed to analyze images for 5+ mental health dimensions + macros.
@@ -78,7 +79,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
 ## Key Files
 - `firestore.rules` & `storage.rules`: Security configuration.
 - `firestore.indexes.json`: Performance and query capability.
-- `backend/src/index.ts`: API and local task subscriber logic.
-- `worker/src/index.ts`: Cloud Run Pub/Sub push subscriber.
+- `backend/src/index.ts`: API logic that saves to Firestore and publishes to Pub/Sub.
+- `worker/src/index.ts`: Cloud Run Pub/Sub push subscriber and AI analysis engine.
 - `frontend/src/components/Upload.tsx`: Frontend upload logic (points to Cloud Run).
 - `backend/Dockerfile` & `worker/Dockerfile`: Containerization configs.

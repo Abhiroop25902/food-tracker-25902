@@ -3,7 +3,6 @@ import cors from 'cors';
 import * as admin from 'firebase-admin';
 import { PubSub } from '@google-cloud/pubsub';
 import dotenv from 'dotenv';
-import { analyzeMeal } from './worker';
 
 dotenv.config();
 
@@ -66,20 +65,4 @@ app.post('/api/meals', async (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Backend API listening on port ${PORT}`);
-  
-  // Local subscriber for testing Pub/Sub flow (only in local dev)
-  if (process.env.NODE_ENV !== 'production' && !process.env.K_SERVICE) {
-    console.log('Starting local Pub/Sub subscriber...');
-    const subscription = pubsub.subscription('meal-analysis-sub');
-    subscription.on('message', async (message) => {
-      try {
-        const { mealId, imageUrl, timestamp } = JSON.parse(message.data.toString());
-        console.log(`Received local analysis task for meal ${mealId}`);
-        await analyzeMeal(mealId, imageUrl, timestamp);
-        message.ack();
-      } catch (err) {
-        console.error('Error in local subscriber:', err);
-      }
-    });
-  }
 });
