@@ -28,12 +28,13 @@ const model = vertexAI.getGenerativeModel({
 const app = express();
 app.use(express.json());
 
-const analyzeMeal = async (mealId: string, imageUrl: string, timestamp: string) => {
+const analyzeMeal = async (mealId: string, imageUrl: string, timestamp: string, description?: string) => {
   const timeContext = timestamp ? new Date(timestamp).toLocaleTimeString() : 'Unknown';
+  const descriptionContext = description ? `\nUser provided description: "${description}"` : '';
   
   const prompt = `
     Analyze this food image and provide nutritional and mental health insights.
-    The meal was eaten at approximately: ${timeContext}.
+    The meal was eaten at approximately: ${timeContext}.${descriptionContext}
     
     Provide the response in the following strict JSON format:
     {
@@ -52,7 +53,7 @@ const analyzeMeal = async (mealId: string, imageUrl: string, timestamp: string) 
       }
     }
     
-    Be scientific but concise. If multiple items are present, estimate the total.
+    Be scientific but concise. If multiple items are present, estimate the total. Use the user provided description to improve accuracy if it contains relevant details like quantities or hidden ingredients.
   `;
 
   try {
@@ -116,10 +117,10 @@ app.post('/', async (req, res) => {
   }
 
   try {
-    const { mealId, imageUrl, timestamp } = JSON.parse(data);
+    const { mealId, imageUrl, timestamp, description } = JSON.parse(data);
     console.log(`Processing meal analysis for mealId: ${mealId}`);
     
-    await analyzeMeal(mealId, imageUrl, timestamp);
+    await analyzeMeal(mealId, imageUrl, timestamp, description);
     
     res.status(204).send();
   } catch (err) {

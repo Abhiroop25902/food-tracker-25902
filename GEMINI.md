@@ -45,6 +45,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Integrated **Daily Calorie Summary** on the Dashboard comparing intake vs. BMR.
     - [x] Updated Firestore rules to secure user profile data.
 - [x] **UX & Polish**:
+    - [x] Added **Meal Description Context** (optional) to the Upload screen, allowing users to provide additional details (e.g., quantities, hidden ingredients) for more accurate AI analysis.
     - [x] Fixed frontend CI/CD failures by removing unused imports in `Navbar.tsx`.
     - [x] Standardized application to **Light Mode** to prevent dark-mode browser conflicts.
     - [x] Hidden browser-default number input arrows for a cleaner look.

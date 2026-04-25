@@ -9,6 +9,7 @@ const BACKEND_URL = 'https://meal-api-527102117645.us-central1.run.app';
 
 const Upload = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState('');
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Upload = () => {
       await axios.post(`${BACKEND_URL}/api/meals`, {
         imageUrl: publicUrl,
         userId: auth.currentUser.uid,
+        description,
         timestamp: new Date().toISOString(),
       });
 
@@ -57,20 +59,35 @@ const Upload = () => {
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
           </label>
         ) : (
-          <div className="relative">
-            <img src={preview} alt="Preview" className="w-full h-80 object-cover rounded-xl" />
-            <button 
-              onClick={() => { setFile(null); setPreview(null); }}
-              className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        )}
+          <div className="space-y-6">
+            <div className="relative">
+              <img src={preview} alt="Preview" className="w-full h-80 object-cover rounded-xl" />
+              <button 
+                onClick={() => { setFile(null); setPreview(null); }}
+                className="absolute top-2 right-2 bg-black/50 text-white p-1 rounded-full hover:bg-black/70"
+              >
+                <X size={20} />
+              </button>
+            </div>
+<div>
+  <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2">
+    Add context (optional)
+  </label>
+  <textarea
+    id="description"
+    rows={3}
+    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none"
+    placeholder="e.g., 'Two rotis (one hidden), large bowl of dal, and salad'"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+  />
+</div>
+</div>
+)}
 
-        <button
-          onClick={handleUpload}
-          disabled={!file || uploading}
+<button
+onClick={handleUpload}
+disabled={!file || uploading}
           className={`w-full mt-6 py-3 rounded-xl font-bold flex items-center justify-center space-x-2 transition ${
             !file || uploading 
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 

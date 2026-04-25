@@ -25,7 +25,7 @@ app.use(express.json());
 const MEALS_TOPIC = 'meal-analysis';
 
 app.post('/api/meals', async (req, res) => {
-  const { imageUrl, userId, timestamp } = req.body;
+  const { imageUrl, userId, timestamp, description } = req.body;
 
   if (!imageUrl || !userId) {
     return res.status(400).json({ error: 'Missing imageUrl or userId' });
@@ -36,6 +36,7 @@ app.post('/api/meals', async (req, res) => {
     const mealRef = await db.collection('meals').add({
       imageUrl,
       userId,
+      description: description || '',
       timestamp: timestamp ? admin.firestore.Timestamp.fromDate(new Date(timestamp)) : admin.firestore.FieldValue.serverTimestamp(),
       status: 'processing',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -47,6 +48,7 @@ app.post('/api/meals', async (req, res) => {
       imageUrl,
       userId,
       timestamp,
+      description: description || '',
     });
     
     const dataBuffer = Buffer.from(data);
