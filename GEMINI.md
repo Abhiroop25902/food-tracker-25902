@@ -37,11 +37,19 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Configured `backend/.env` with absolute path to service account.
     - [x] Updated `.gitignore` to protect sensitive `.json` and `.env` files.
     - [x] Set up Cloud Run and Artifact Registry in `us-central1`.
-- [x] **Bug Fixes**: 
-    - [x] Fixed Vertex AI SDK typo (`inline_data` -> `inlineData`).
-    - [x] Added `.dockerignore` and fixed Dockerfile build issues.
-    - [x] Updated frontend `BACKEND_URL` to point to production.
-    - [x] Fixed TypeScript linting errors in `Dashboard.tsx` (unused icon imports).
+- [x] **User Management**:
+    - [x] Implemented **Onboarding Screen** for new users to collect weight, height, age, and gender.
+    - [x] Added **BMR Calculation** (Mifflin-St Jeor Equation) to estimate resting calorie usage.
+    - [x] Created a **Profile Page** for users to view and update their personal metrics.
+    - [x] Integrated **Daily Calorie Summary** on the Dashboard comparing intake vs. BMR.
+    - [x] Updated Firestore rules to secure user profile data.
+- [x] **UX & Polish**:
+    - [x] Standardized application to **Light Mode** to prevent dark-mode browser conflicts.
+    - [x] Hidden browser-default number input arrows for a cleaner look.
+    - [x] Improved dropdown UI with custom SVG arrows and balanced padding.
+    - [x] Migrated all forms to **React 19 Action Patterns** (`action` + `FormData`).
+    - [x] Configured **COOP Headers** (`same-origin-allow-popups`) in Vite and Firebase to fix Google Login popup issues.
+    - [x] Resolved logout race conditions by improving Firestore listener cleanup.
 - [x] **CI/CD & GitHub**:
     - [x] Set up GitHub Actions for automated deployment:
         - `deploy-backend.yml`: Deploys Backend API to Cloud Run on changes to `backend/**`.

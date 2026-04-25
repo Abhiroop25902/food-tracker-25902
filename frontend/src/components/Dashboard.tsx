@@ -1,20 +1,41 @@
 import { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { Brain, Zap, Waves, Moon, Heart } from 'lucide-react';
+import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
+import { Brain, Zap, Waves, Moon, Heart, Utensils } from 'lucide-react';
 import clsx from 'clsx';
-import { type Meal } from '../types';
+import type { Meal,  UserProfile } from '../types';
 
 const Dashboard = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let unsubscribeSnapshot: (() => void) | null = null;
+
     // Wait for auth to be ready
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+    const unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
+      // Clean up previous listener if it exists
+      if (unsubscribeSnapshot) {
+        unsubscribeSnapshot();
+        unsubscribeSnapshot = null;
+      }
+
       if (!user) {
+        setMeals([]);
+        setProfile(null);
         setLoading(false);
         return;
+      }
+
+      // Fetch user profile
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setProfile(userDoc.data() as UserProfile);
+        }
+      } catch (error) {
+        console.error("Error fetching profile in Dashboard:", error);
       }
 
       const q = query(
@@ -23,38 +44,76 @@ const Dashboard = () => {
         orderBy('timestamp', 'desc')
       );
 
-      const unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+      unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
         const mealsData = snapshot.docs.map(doc => {
           const data = doc.data();
           return {
             id: doc.id,
             ...data,
             // Convert Firestore timestamp to ISO string for the UI
-            timestamp: data.timestamp?.toDate()?.toISOString() || new Date().toISOString()
+            timestamp: data.timestamp?.toDate ? data.timestamp.toDate().toISOString() : new Date().toISOString()
           };
         }) as Meal[];
         setMeals(mealsData);
         setLoading(false);
       }, (error) => {
-        console.error("Firestore error:", error);
+        // Silently handle permission errors that often occur during the logout race condition
+        if (error.code === 'permission-denied') {
+          return;
+        }
+        console.error("Firestore snapshot error:", error);
         setLoading(false);
       });
-
-      return () => unsubscribeSnapshot();
     });
 
-    return () => unsubscribeAuth();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+    };
   }, []);
+
+  const caloriesToday = meals
+    .filter(meal => {
+      const mealDate = new Date(meal.timestamp);
+      const today = new Date();
+      return mealDate.toDateString() === today.toDateString();
+    })
+    .reduce((sum, meal) => sum + (meal.analysis?.calories || 0), 0);
 
   if (loading) return <div className="flex items-center justify-center py-20">Loading your history...</div>;
 
   return (
     <div className="space-y-8 pb-12">
-      <header className="flex justify-between items-end">
+      <header className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Your Nutrition Journey</h1>
           <p className="text-gray-500">Connecting what you eat to how you feel.</p>
         </div>
+
+        {profile && (
+          <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+            <div className="bg-orange-100 p-2 rounded-lg text-orange-600">
+              <Utensils size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase text-gray-400">Calories Today</p>
+              <div className="flex items-baseline space-x-1">
+                <span className="text-xl font-bold">{caloriesToday}</span>
+                <span className="text-gray-300">/</span>
+                <span className="text-sm text-gray-500">{Math.round(profile.bmr)} <span className="text-[10px]">BMR</span></span>
+              </div>
+            </div>
+            <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className={clsx(
+                  "h-full rounded-full transition-all duration-1000",
+                  caloriesToday > profile.bmr ? "bg-red-500" : "bg-orange-500"
+                )}
+                style={{ width: `${Math.min((caloriesToday / profile.bmr) * 100, 100)}%` }}
+              />
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Mental Health Insights Summary */}
