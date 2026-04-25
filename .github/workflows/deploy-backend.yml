@@ -13,6 +13,7 @@ env:
   PROJECT_ID: food-tracker-25902
   REGION: us-central1
   SERVICE_NAME: meal-api
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
@@ -30,6 +31,14 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
+
+      - name: Ensure Artifact Registry repository exists
+        run: |-
+          gcloud artifacts repositories describe cloud-run-source-deploy --location=${{ env.REGION }} || \
+          gcloud artifacts repositories create cloud-run-source-deploy \
+            --repository-format=docker \
+            --location=${{ env.REGION }} \
+            --description="Cloud Run source deployment repository"
 
       - name: Authorize Docker
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
