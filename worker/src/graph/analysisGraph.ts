@@ -94,7 +94,7 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
     1. Look at the original image and context.
     2. Weigh the arguments from both agents.
     3. Determine the most accurate possible nutritional values.
-    4. Provide the final response in STRICT JSON format.
+    4. Provide the final response in STRICT JSON format. Do not include any markdown formatting, preamble, or postamble. Your entire response should be a single JSON object.
     
     Context:
     - Time: ${state.timeContext}
@@ -124,17 +124,29 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
     new SystemMessage(prompt),
     new HumanMessage({
       content: [
-        { type: 'text', text: "Synthesize the analysis and provide final JSON." },
+        { type: 'text', text: "Synthesize the analysis and provide final JSON. Ensure the output is valid JSON." },
         { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${state.imageBase64}` } },
       ],
     }),
   ]);
 
-  const responseText = response.content.toString();
-  const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Could not parse JSON from Overseer');
+  const responseText = response.content.toString().trim();
   
-  return { finalAnalysis: JSON.parse(jsonMatch[0]) };
+  // More robust JSON extraction: find the first '{' and last '}'
+  const firstBrace = responseText.indexOf('{');
+  const lastBrace = responseText.lastIndexOf('}');
+  
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
+    throw new Error(`Could not find JSON object in Overseer response: ${responseText.substring(0, 100)}...`);
+  }
+
+  const jsonString = responseText.substring(firstBrace, lastBrace + 1);
+  
+  try {
+    return { finalAnalysis: JSON.parse(jsonString) };
+  } catch (e) {
+    throw new Error(`Failed to parse Overseer JSON: ${(e as Error).message}. Raw: ${jsonString.substring(0, 100)}...`);
+  }
 };
 
 const workflow = new StateGraph(StateAnnotation)

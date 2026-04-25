@@ -98,7 +98,13 @@ const Dashboard = () => {
     })
     .reduce((sum, meal) => sum + (meal.analysis?.calories || 0), 0);
 
-  const isLatestMealToday = meals[0] && new Date(meals[0].timestamp).toDateString() === new Date().toDateString();
+  const latestAnalyzedMeal = meals.find(meal => 
+    meal.analysis && new Date(meal.timestamp).toDateString() === new Date().toDateString()
+  );
+
+  const isAnyMealProcessingToday = meals.some(meal => 
+    !meal.analysis && meal.status !== 'error' && new Date(meal.timestamp).toDateString() === new Date().toDateString()
+  );
 
   if (loading) {
     return (
@@ -150,9 +156,11 @@ const Dashboard = () => {
         <div>
           <h2 className="text-xl font-bold mb-1">Latest Insight</h2>
           <p className="opacity-90 leading-relaxed">
-            {isLatestMealToday && meals[0]?.analysis
-              ? meals[0].analysis.mentalHealth.advice
-              : "Welcome back! Start by logging your first meal of the day to see how it impacts your mental focus."}
+            {latestAnalyzedMeal
+              ? latestAnalyzedMeal.analysis.mentalHealth.advice
+              : isAnyMealProcessingToday
+                ? "Analyzing your meal to provide personalized mental health insights..."
+                : "Welcome back! Start by logging your first meal of the day to see how it impacts your mental focus."}
           </p>
         </div>
       </section>

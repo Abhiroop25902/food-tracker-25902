@@ -103,6 +103,8 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Fixed `userId` reference error in Worker that caused Cloud Run deployment failures.
     - [x] Resolved Frontend build errors by cleaning up `dummyData.ts` and updating types.
     - [x] **New**: Fixed React/Lint errors in `App.tsx` regarding unused expressions and missing dependencies.
+    - [x] **New**: Fixed "Latest Insight" logic to persist the last successful insight while new meals are processing.
+    - [x] **New**: Hardened Overseer JSON parsing with robust brace-matching and explicit prompt constraints.
 - [x] **Documentation**: Updated README with "Mindful Bites" branding and long-term mental health benefits.
 - [x] **Infrastructure**: 
     - [x] Frontend link added: `https://food-tracker-25902.web.app`.
