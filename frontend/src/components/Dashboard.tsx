@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { db, auth } from '../firebase';
-import { collection, query, where, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { Brain, Zap, Waves, Moon, Heart, Utensils, Loader2, ChevronDown } from 'lucide-react';
+import { db, auth, storage } from '../firebase';
+import { collection, query, where, orderBy, onSnapshot, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { ref, deleteObject } from 'firebase/storage';
+import { Brain, Zap, Waves, Moon, Heart, Utensils, Loader2, ChevronDown, Trash2 } from 'lucide-react';
 import clsx from 'clsx';
-import type { Meal,  UserProfile } from '../types';
+import type { Meal, UserProfile } from '../types';
 
 const Dashboard = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
@@ -17,6 +18,22 @@ const Dashboard = () => {
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+  const handleDelete = async (meal: Meal) => {
+    if (!window.confirm("Are you sure you want to delete this meal record?")) return;
+
+    try {
+      // 1. Delete from Firestore
+      await deleteDoc(doc(db, 'meals', meal.id));
+
+      // 2. Delete image from Storage
+      const imageRef = ref(storage, meal.imageUrl);
+      await deleteObject(imageRef);
+    } catch (error) {
+      console.error("Error deleting meal:", error);
+      alert("Failed to delete meal. Please try again.");
+    }
   };
 
   useEffect(() => {
@@ -157,6 +174,15 @@ const Dashboard = () => {
                 <span className="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-bold border border-white/20">
                   {new Date(meal.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
+              </div>
+              <div className="absolute top-3 right-3">
+                <button 
+                  onClick={() => handleDelete(meal)}
+                  className="bg-white/90 backdrop-blur-sm text-red-500 p-2 rounded-full border border-white/20 hover:bg-red-50 transition-colors shadow-sm cursor-pointer"
+                  title="Delete meal"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
             </div>
 
