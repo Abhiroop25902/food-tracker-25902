@@ -29,4 +29,3 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_FOOD_TRACKER_25902 }}
           projectId: food-tracker-25902
-          entryPoint: ./frontend
