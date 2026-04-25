@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/UserProfile';
 import { Loader2 } from 'lucide-react';
 
 interface OnboardingProps {

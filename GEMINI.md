@@ -98,6 +98,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
 - [x] **Modular Architecture**: 
     - [x] Refactored worker into `src/graph`, `src/services`, and `src/types`.
     - [x] **New**: Further modularized `src/types` into `meal.ts` and `state.ts`.
+    - [x] **New**: Refactored frontend types into individual `Meal.ts` and `UserProfile.ts` files.
     - [x] Added `reasoning` field to Firestore and Frontend UI for transparency.
 - [x] **Bug Fixes**: 
     - [x] Fixed `userId` reference error in Worker that caused Cloud Run deployment failures.
@@ -105,6 +106,9 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Fixed React/Lint errors in `App.tsx` regarding unused expressions and missing dependencies.
     - [x] **New**: Fixed "Latest Insight" logic to persist the last successful insight while new meals are processing.
     - [x] **New**: Hardened Overseer JSON parsing with robust brace-matching and explicit prompt constraints.
+    - [x] **New**: Fixed Frontend CI/CD by resolving `Meal` and `UserProfile` type mismatches and null-safety issues in Dashboard.
+- [x] **UX & Polish**:
+    - [x] Added robust error state UI to `MealCard` for failed analyses.
 - [x] **Documentation**: Updated README with "Mindful Bites" branding and long-term mental health benefits.
 - [x] **Infrastructure**: 
     - [x] Frontend link added: `https://food-tracker-25902.web.app`.

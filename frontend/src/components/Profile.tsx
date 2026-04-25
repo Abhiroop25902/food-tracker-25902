@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/UserProfile';
 import { User, Scale, Ruler, Calendar, Activity, LogOut, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

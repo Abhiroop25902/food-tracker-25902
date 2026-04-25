@@ -2,7 +2,8 @@ export type Meal = {
   id: string;
   imageUrl: string;
   timestamp: string;
-  status: 'processing' | 'completed';
+  status: 'processing' | 'completed' | 'error';
+  error?: string;
   analysis?: {
     calories: number;
     protein: number;
@@ -19,17 +20,4 @@ export type Meal = {
       advice: string;
     };
   };
-}
-
-export type UserProfile = {
-  uid: string;
-  weight: number;
-  height: number;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  bmr: number;
-  dailyCalorieTarget: number;
-  onboarded: boolean;
-  displayName: string;
-  photoURL: string;
 }

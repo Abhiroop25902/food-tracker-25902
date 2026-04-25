@@ -4,7 +4,8 @@ import { collection, query, where, orderBy, onSnapshot, doc, getDoc, deleteDoc }
 import { ref, deleteObject } from 'firebase/storage';
 import { Brain, Utensils, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
-import type { Meal, UserProfile } from '../types';
+import type { Meal } from '../types/Meal';
+import type { UserProfile } from '../types/UserProfile';
 import MealCard from './MealCard';
 
 const Dashboard = () => {
@@ -156,7 +157,7 @@ const Dashboard = () => {
         <div>
           <h2 className="text-xl font-bold mb-1">Latest Insight</h2>
           <p className="opacity-90 leading-relaxed">
-            {latestAnalyzedMeal
+            {latestAnalyzedMeal?.analysis
               ? latestAnalyzedMeal.analysis.mentalHealth.advice
               : isAnyMealProcessingToday
                 ? "Analyzing your meal to provide personalized mental health insights..."

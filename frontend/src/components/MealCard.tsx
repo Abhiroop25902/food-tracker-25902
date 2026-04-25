@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Brain, Zap, Waves, Moon, Heart, Loader2, ChevronDown, Trash2 } from 'lucide-react';
+import { Brain, Zap, Waves, Moon, Heart, Loader2, ChevronDown, Trash2, AlertCircle } from 'lucide-react';
 import clsx from 'clsx';
-import type { Meal } from '../types';
+import type { Meal } from '../types/Meal';
 
 interface MealCardProps {
   meal: Meal;
@@ -39,7 +39,17 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onDelete }) => {
       </div>
 
       <div className="p-4 md:w-2/3 flex flex-col overflow-y-auto">
-        {!meal.analysis ? (
+        {meal.status === 'error' ? (
+          <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center h-full">
+            <div className="bg-red-100 p-3 rounded-full text-red-600">
+              <AlertCircle className="w-8 h-8" />
+            </div>
+            <div>
+              <h3 className="font-bold text-red-900 text-lg">Analysis Failed</h3>
+              <p className="text-sm text-red-500">{meal.error || "Something went wrong while analyzing this meal."}</p>
+            </div>
+          </div>
+        ) : !meal.analysis ? (
           <div className="flex flex-col items-center justify-center space-y-4 py-8 text-center h-full">
             <div className="relative">
               <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
