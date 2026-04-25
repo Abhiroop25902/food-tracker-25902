@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
 import { type User } from 'firebase/auth';
-import { LogOut, PlusCircle, LayoutDashboard, User as UserIcon } from 'lucide-react';
+import { PlusCircle, LayoutDashboard, User as UserIcon } from 'lucide-react';
 
 interface NavbarProps {
   user: User;
