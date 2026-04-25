@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'worker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
 
 env:
   PROJECT_ID: food-tracker-25902
