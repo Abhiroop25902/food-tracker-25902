@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { type User } from 'firebase/auth';
-import { PlusCircle, LayoutDashboard, User as UserIcon } from 'lucide-react';
+import { PlusCircle, LayoutDashboard } from 'lucide-react';
 
 interface NavbarProps {
   user: User;
@@ -20,12 +20,8 @@ const Navbar = ({ user }: NavbarProps) => {
             <PlusCircle size={20} />
             <span>Add Meal</span>
           </Link>
-          <Link to="/profile" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600 transition">
-            <UserIcon size={20} />
-            <span>Profile</span>
-          </Link>
           <div className="flex items-center space-x-3 border-l pl-6 border-gray-200">
-            <Link to="/profile">
+            <Link to="/profile" title="Profile">
               <img src={user.photoURL || ''} alt="User" className="w-8 h-8 rounded-full hover:ring-2 hover:ring-indigo-500 transition" />
             </Link>
           </div>

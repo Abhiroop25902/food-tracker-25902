@@ -56,6 +56,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] **New**: Replaced "Start Analysis" with "Upload & Analyze" for clarity.
     - [x] **New**: Added a professional loader/spinner during authentication.
     - [x] **New**: Stabilized Dashboard layout with fixed image aspect ratios and "Analyzing..." states.
+    - [x] **New**: Removed redundant "Profile" text link from Navbar, favoring the user avatar.
 - [x] **AI Upgrade**: Migrated to `gemini-2.5-flash` for long-term stability and performance.
 
     - [x] Set up GitHub Actions for automated deployment:
