@@ -6,7 +6,7 @@ import { AgentState } from '../types/state';
 const model = new ChatVertexAI({
   model: 'gemini-2.5-flash',
   temperature: 0,
-  maxOutputTokens: 2048,
+  maxOutputTokens: 4096, // Increased from 2048
 });
 
 const StateAnnotation = Annotation.Root({
@@ -80,21 +80,27 @@ const underestimatorNode = async (state: typeof StateAnnotation.State) => {
 };
 
 const overseerNode = async (state: typeof StateAnnotation.State) => {
+  // Truncate arguments to avoid overwhelming the model or hitting token limits
+  const truncatedOver = state.overestimate.substring(0, 3000);
+  const truncatedUnder = state.underestimate.substring(0, 3000);
+
   const prompt = `
     You are the "Overseer" nutritional judge. 
     You have two competing perspectives on this meal:
     
     OVERESTIMATOR ARGUMENT:
-    ${state.overestimate}
+    ${truncatedOver}
     
     UNDERESTIMATOR ARGUMENT:
-    ${state.underestimate}
+    ${truncatedUnder}
     
     Your task:
     1. Look at the original image and context.
     2. Weigh the arguments from both agents.
     3. Determine the most accurate possible nutritional values.
-    4. Provide the final response in STRICT JSON format. Do not include any markdown formatting, preamble, or postamble. Your entire response should be a single JSON object.
+    4. Provide the final response in STRICT JSON format. 
+    
+    CRITICAL: Return ONLY the raw JSON object. Do not use markdown blocks (no \`\`\`json). No preamble. No postamble.
     
     Context:
     - Time: ${state.timeContext}
@@ -124,7 +130,7 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
     new SystemMessage(prompt),
     new HumanMessage({
       content: [
-        { type: 'text', text: "Synthesize the analysis and provide final JSON. Ensure the output is valid JSON." },
+        { type: 'text', text: "Synthesize analysis into valid JSON. NO MARKDOWN." },
         { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${state.imageBase64}` } },
       ],
     }),
@@ -132,12 +138,12 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
 
   const responseText = response.content.toString().trim();
   
-  // More robust JSON extraction: find the first '{' and last '}'
+  // Robust JSON extraction: find the first '{' and last '}'
   const firstBrace = responseText.indexOf('{');
   const lastBrace = responseText.lastIndexOf('}');
   
-  if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
-    throw new Error(`Could not find JSON object in Overseer response: ${responseText.substring(0, 100)}...`);
+  if (firstBrace === -1 || lastBrace === -1) {
+    throw new Error(`Overseer response missing braces: ${responseText.substring(0, 200)}...`);
   }
 
   const jsonString = responseText.substring(firstBrace, lastBrace + 1);
@@ -145,6 +151,15 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
   try {
     return { finalAnalysis: JSON.parse(jsonString) };
   } catch (e) {
+    // If it fails, maybe it's missing a closing brace due to truncation? 
+    // Let's try to append one as a last resort if it looks like it's the issue
+    if (jsonString.startsWith('{') && !jsonString.endsWith('}')) {
+      try {
+        return { finalAnalysis: JSON.parse(jsonString + '}') };
+      } catch (innerE) {
+        throw new Error(`Failed to parse Overseer JSON: ${(e as Error).message}. Raw: ${jsonString.substring(0, 100)}...`);
+      }
+    }
     throw new Error(`Failed to parse Overseer JSON: ${(e as Error).message}. Raw: ${jsonString.substring(0, 100)}...`);
   }
 };

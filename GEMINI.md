@@ -74,6 +74,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Added `analyzing` status state to track in-progress processing.
     - [x] Implemented idempotency in Worker to prevent re-processing already analyzed meals.
     - [x] Added safety checks for deleted Firestore documents to prevent infinite Pub/Sub retry loops.
+    - [x] **New**: Hardened Overseer JSON parsing with input truncation, increased token limits, and auto-repair logic.
 - [x] **AI Upgrade**: Migrated to `gemini-2.5-flash` for long-term stability and performance.
 
     - [x] Set up GitHub Actions for automated deployment:
