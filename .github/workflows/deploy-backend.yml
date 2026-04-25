@@ -11,6 +11,7 @@ env:
   PROJECT_ID: food-tracker-25902
   REGION: us-central1
   SERVICE_NAME: meal-api
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
