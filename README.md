@@ -1,6 +1,8 @@
 # Mindful Bites: Mental Health & Nutrition Tracker
 
-**Mindful Bites** is an innovative application developed for a Google Hackathon, designed to bridge the gap between nutrition and mental well-being. By leveraging the power of Gemini 1.5 Flash and Google Cloud, the app helps users understand how their dietary choices influence their cognitive performance and emotional state in the long term.
+**[Live Demo](https://food-tracker-25902.web.app)**
+
+**Mindful Bites** is an innovative application developed for a Google Hackathon, designed to bridge the gap between nutrition and mental well-being. By leveraging the power of Gemini 3 Flash and Google Cloud, the app helps users understand how their dietary choices influence their cognitive performance and emotional state in the long term.
 
 ## 🧠 Better Mental Health Through Nutrition
 
@@ -16,7 +18,7 @@ Most nutrition apps focus solely on weight loss or muscle gain. **Mindful Bites*
 ## 🚀 Tech Stack
 - **Frontend**: React 19 (Vite, TS), Tailwind v4, Lucide React, Firebase SDK.
 - **Backend**: Node.js Express (TS), Firebase Admin SDK, GCP Pub/Sub SDK.
-- **AI**: Gemini 1.5 Flash (via Vertex AI SDK).
+- **AI**: Gemini 3 Flash (via Vertex AI SDK).
 - **Infrastructure**: Google Cloud Pub/Sub, Cloud Run, Firestore, Firebase Storage.
 
 ## 🛠️ How It Works
