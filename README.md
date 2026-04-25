@@ -1,5 +1,7 @@
 # Mental Health & Nutrition App (Google Hackathon)
 
+This project is a **vibe coded** application built with 🚀 **JetBrains Air** and **Gemini**.
+
 ## Architecture
 - **Frontend**: React (Vite, TS, Tailwind)
 - **Backend API**: Node.js (Express, Firebase Admin)

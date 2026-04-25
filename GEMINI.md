@@ -48,9 +48,12 @@ An app for a Google Hackathon where users photograph food to track both macros a
         - `deploy-worker.yml`: Deploys Worker to Cloud Run on changes to `worker/**`.
         - `firebase-hosting-merge.yml`: Deploys Frontend to Firebase Hosting on changes to `frontend/**`.
     - [x] Configured all workflows to use Node.js 24 runners (`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24`).
+    - [x] Resolved GCP IAM permission issues (Artifact Registry Writer & Service Account User) for the GitHub Action service account.
+    - [x] Added `workflow_dispatch` for manual triggers and path triggers for workflow self-updates.
     - [x] Pushed codebase to GitHub repository: `https://github.com/Abhiroop25902/food-tracker-25902.git`.
 - [x] **Security**:
     - [x] Patched Dependabot alerts by updating `uuid` to `>=14.0.0` and `@tootallnate/once` to `>=3.0.1`.
+    - [x] Verified service account scopes for Cloud Run deployments.
 
 ## Next Steps
 1. **Apply CORS**: Run `gsutil cors set cors.json gs://food-tracker-25902.firebasestorage.app`.
