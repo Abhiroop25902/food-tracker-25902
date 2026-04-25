@@ -55,10 +55,17 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Patched Dependabot alerts by updating `uuid` to `>=14.0.0` and `@tootallnate/once` to `>=3.0.1`.
     - [x] Verified service account scopes for Cloud Run deployments.
 
+- [x] **Branding**: Renamed application to "Mindful Bites" across all platforms.
+- [x] **AI Upgrade**: Migrated to `gemini-3-flash-preview` for better speed and cost efficiency.
+- [x] **Documentation**: Updated README with "Mindful Bites" branding and long-term mental health benefits.
+- [x] **Infrastructure**: 
+    - [x] Frontend link added: `https://food-tracker-25902.web.app`.
+    - [x] Verified model performance with new version.
+
 ## Next Steps
-1. **Apply CORS**: Run `gsutil cors set cors.json gs://food-tracker-25902.firebasestorage.app`.
-2. **Deploy Rules**: Run `firebase deploy --only firestore,storage`.
-3. **Real Image Testing**: Test the full upload-to-insight loop with the cloud infrastructure.
+1. **Real Image Testing**: Test the full upload-to-insight loop with the cloud infrastructure.
+2. **Analytics**: Implement a "Trends" view to visualize mental health impacts over time.
+3. **UX Polish**: Add loading skeletons and transition animations for a smoother feel.
 
 ## Key Files
 - `firestore.rules` & `storage.rules`: Security configuration.
