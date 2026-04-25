@@ -155,7 +155,7 @@ app.post('/', async (req, res) => {
   }
 
   try {
-    const { mealId, imageUrl, timestamp, description } = JSON.parse(data);
+    const { mealId, imageUrl, userId, timestamp, description } = JSON.parse(data);
     console.log(`Processing meal analysis for mealId: ${mealId}`);
     
     // Check for existence and idempotency
