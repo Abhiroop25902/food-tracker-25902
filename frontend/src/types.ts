@@ -1,0 +1,21 @@
+export type Meal = {
+  id: string;
+  imageUrl: string;
+  timestamp: string;
+  status: 'processing' | 'completed';
+  analysis?: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    mentalHealth: {
+      sugarCrashRisk: 'low' | 'medium' | 'high';
+      focusImpact: string;
+      inflammationLevel: 'low' | 'medium' | 'high';
+      sleepImpact: string;
+      gutHealth: string;
+      moodImpact: string;
+      advice: string;
+    };
+  };
+}
