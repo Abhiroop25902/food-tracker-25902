@@ -32,6 +32,9 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Debug Service Account
+        run: gcloud auth list
+
       - name: Ensure Artifact Registry repository exists
         run: |-
           gcloud artifacts repositories describe cloud-run-source-deploy --location=${{ env.REGION }} || \
