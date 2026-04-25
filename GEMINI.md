@@ -6,7 +6,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
 ## Tech Stack
 - **Frontend**: React 19 (Vite, TS), Tailwind v4, Lucide React, Firebase SDK.
 - **Backend**: Node.js Express (TS), Firebase Admin SDK, GCP Pub/Sub SDK, Axios.
-- **AI**: Gemini 1.5 Flash (via Vertex AI SDK).
+- **AI**: Gemini 3 Flash (via Vertex AI SDK).
 - **GCP Resources**: Cloud Pub/Sub (Topic: `meal-analysis`, Subscription: `meal-analysis-sub`), Vertex AI.
 - **Firebase**: Auth (Google), Firestore (Collection: `meals`), Storage (Bucket: `food-pics`).
 

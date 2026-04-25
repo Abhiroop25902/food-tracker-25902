@@ -22,7 +22,7 @@ const vertexAI = new VertexAI({
 });
 
 const model = vertexAI.getGenerativeModel({
-  model: 'gemini-1.5-flash',
+  model: 'gemini-3-flash-preview',
 });
 
 const app = express();

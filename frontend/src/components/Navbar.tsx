@@ -11,7 +11,7 @@ const Navbar = ({ user }: NavbarProps) => {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-indigo-600">MindfulBites</Link>
+        <Link to="/" className="text-xl font-bold text-indigo-600">Mindful Bites</Link>
         <div className="flex items-center space-x-6">
           <Link to="/" className="flex items-center space-x-1 text-gray-600 hover:text-indigo-600 transition">
             <LayoutDashboard size={20} />

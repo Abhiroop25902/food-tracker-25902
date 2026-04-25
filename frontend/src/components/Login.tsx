@@ -17,7 +17,7 @@ const Login = () => {
         <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
           <Camera className="text-indigo-600 w-10 h-10" />
         </div>
-        <h1 className="text-3xl font-bold mb-2">MindfulBites</h1>
+        <h1 className="text-3xl font-bold mb-2">Mindful Bites</h1>
         <p className="text-gray-500 mb-10">Track your nutrition and mental well-being through your meals.</p>
         <button
           onClick={handleLogin}
