@@ -36,6 +36,7 @@ const overestimatorNode = async (state: typeof StateAnnotation.State) => {
     - User Goals: ${state.userContext}
     
     Provide your reasoning for a higher estimate. Be specific about what ingredients or visual cues lead you to this.
+    DO NOT include agent names (like "Overestimator" or "Agent") in your response. Focus purely on the nutritional analysis.
   `;
 
   const response = await model.invoke([
@@ -64,6 +65,7 @@ const underestimatorNode = async (state: typeof StateAnnotation.State) => {
     - User Goals: ${state.userContext}
     
     Provide your reasoning for a lower estimate. Be specific about what ingredients or visual cues lead you to this.
+    DO NOT include agent names (like "Underestimator" or "Agent") in your response. Focus purely on the nutritional analysis.
   `;
 
   const response = await model.invoke([
@@ -113,7 +115,7 @@ const overseerNode = async (state: typeof StateAnnotation.State) => {
       "protein": number,
       "carbs": number,
       "fat": number,
-      "reasoning": "Objective technical synthesis of arguments (max 2 sentences). Avoid first-person language ('I', 'my'). Focus on visual evidence and portion estimation logic.",
+      "reasoning": "Objective technical synthesis of arguments (max 2 sentences). Avoid first-person language ('I', 'my') and DO NOT mention the agents ('Overestimator', 'Underestimator', etc.) by name. Focus on visual evidence and portion estimation logic.",
       "mentalHealth": {
         "sugarCrashRisk": "low" | "medium" | "high",
         "focusImpact": "string",

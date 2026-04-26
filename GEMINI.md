@@ -95,7 +95,7 @@ An app for a Google Hackathon where users photograph food to track both macros a
     - [x] Replaced single-prompt analysis with a **LangGraph-based dialectical system**.
     - [x] Implemented **Overestimator** and **Underestimator** agents to bracket macro accuracy.
     - [x] Implemented **Overseer Agent** to synthesize technical arguments and provide a final "AI Reasoning" field.
-    - [x] **New**: Refined Overseer prompt to ensure objective (third-person) and concise reasoning (max 2 sentences).
+    - [x] **New**: Refined agent prompts (Over/Under/Overseer) to exclude agent names (e.g., "As an Overestimator...") from reasoning for a cleaner UI.
     - [x] Implemented **Insight Agent (Health Coach)** to generate holistic daily advice based on cumulative meal history.
     - [x] **New**: Decoupled Health Coach data flow to pull fresh data directly from Firestore post-analysis.
 - [x] **Modular Architecture**: 
